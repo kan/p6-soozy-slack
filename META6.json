@@ -7,7 +7,7 @@
     "Soozy::Slack" : "lib/Soozy/Slack.pm6"
   },
   "depends" : [
-      "HTTP::Server::Tiny"
+    "HTTP::Server::Tiny"
   ],
   "description" : "",
   "test-depends" : [ ],

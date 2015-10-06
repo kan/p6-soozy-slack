@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=utf-8 />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Soozy Slack</title>
+
+    <link rel="stylesheet" href="/css/pure.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!--[if lt IE 9]>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="icon" href="/img/favicon.gif">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <link rel="localizations" hreflang="ja" href="/loc/ja.json" type="application/x-l10n+json">
+    <link rel="localizations" hreflang="en" href="/loc/en.json" type="application/x-l10n+json">
+    <script src="/js/jquery-2.1.4.min.js"></script>
+    <script src="/js/l10n.min.js"></script>
+    <script>
+      function localize() {
+        $('.loc').each(function() {
+          var lid = $(this).data('lid');
+          var html = lid.toLocaleString();
+
+          if (lid !== html) {
+            $(this).html($(this).data('lid').toLocaleString());
+          }
+
+          if (String.locale == "en") {
+            $('#loc-en-btn').addClass('pure-button-disabled');
+            $('#loc-ja-btn').removeClass('pure-button-disabled');
+          }
+          else {
+            $('#loc-ja-btn').addClass('pure-button-disabled');
+            $('#loc-en-btn').removeClass('pure-button-disabled');
+          }
+        });
+      }
+      $(function(){
+        $('form').on('submit', function(ev) {
+          $('form input, button').prop('disabled', true);
+          $.ajax({
+            url: '/invite',
+            success: function(data) {
+              if (data.success == 1) {
+                $('#message')
+                  .attr('class', 'success')
+                  .text('invite succeed');
+              } else {
+                $('#message')
+                  .attr('class', 'error')
+                  .text(data.error);
+              }
+              $('form input, button').prop('disabled', false);
+            },
+            data: { email: $('#email').val() },
+            type: 'POST'
+          });
+          return false;
+        });
+        $('button.loc-button').on('click', function() {
+          String.locale = $(this).data('locale');
+          localize();
+        });
+        if (String.locale == "") {
+          // set default locale
+          String.locale = "en";
+        }
+        localize();
+      });
+    </script>
+
+    <meta property="og:title" content="soozy" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://soozy.fushihara.net/" />
+    <meta property="og:site_name" content="#soozy" />
+    <meta property="og:description" content="soozy.slack.comについての説明と自動登録フォーム" />
+
+  </head>
+  <body>
+    <div class="loc-menu">
+      <button id="loc-ja-btn" data-locale="ja" class="pure-button loc-button">Japanese</button>
+      <button id="loc-en-btn" data-locale="en" class="pure-button loc-button">English</button>
+    </div>
+
+    <h1>#Soozy</h1>
+
+    <h2 class="loc" data-lid="whatsisthis">これはなに?</h2>
+
+    <p class="loc" data-lid="description">#soozy は元々IRCのfreenodeにあったチャンネルで、日本のperlコミュニティを中心にperlのことを含むプログラミングに関わる話題を中心に話し合っていました。<br />2015年6月に、<a href="https://slack.com/">Slack</a>を利用する新しい形に移行し始めました。</p>
+
+    <h2 class="loc" data-lid="eligibility">参加資格的なもの</h2>
+
+    <p class="loc" data-lid="about">特にありません。どなたでも歓迎します。ただ、プログラミングに関わる内容を日本語で話しているチャンネルが多いので、その点ご承知置き下さい。<br />2015/09現在、以下のようなものを中心に10以上のチャンネルがあるようです。</p>
+
+    <ul>
+      <li>#android</li>
+      <li>#golang</li>
+      <li>#ios</li>
+      <li>#java</li>
+      <li>#js</li>
+      <li>#perl6</li>
+      <li>#perl</li>
+      <li>#redis</li>
+      <li>#security</li>
+      <li>#vim</li>
+      <li>#emacs</li>
+    </ul>
+
+    <h2 class="loc" data-lid="howtojoin">参加する方法</h2>
+
+    <p class="loc" data-lid="join">以下のフォームにメールアドレスを入れて「Invite Me」ボタンを押すと、アドレス宛てに招待メールが届きます。</p>
+
+    <form class="pure-form" method="POST" action="/invite">
+      <fieldset>
+        <legend class="loc" data-lid="form-label">soozyに参加する</legend>
+
+        <input type="email" id="email" name="email" placeholder="Email" required />
+
+        <button type="submit" class="pure-button pure-button-primary">Invite Me</button>
+      <fieldset>
+      <div id="message"></div>
+    </form>
+
+    <h2 class="loc" data-lid="contact">その他、連絡先</h2>
+
+    <p class="loc" data-lid="address">このサイトは<a href="https://github.com/kan/soozy-slack">github</a>でコードを管理しています。内容へのPR, Issueは大歓迎です。<br />問い合わせ事項がありましたら、<a href="mailto:kan.fushihara@gmail.com">kan.fushihara@gmail.com</a>までご連絡下さい。</p>
+  </body>
+</html>
