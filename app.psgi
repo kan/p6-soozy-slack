@@ -2,17 +2,17 @@ use v6;
 
 use Crust::Request;
 use Crust::App::File;
-use HTTP::Tinyish::Curl;
+use HTTP::Tinyish;
+use URI::Escape;
 
 sub app($env) {
     my $req = Crust::Request.new($env);
 
     if $req.path-info eq '/invite' {
-        my $email = $req.parameters<email>;
-        say $email;
-        signal(SIGCHLD).tap({ say 'hoge'});
-        my $token = %*ENV<SLACK-API-TOKEN>;
-        my $http = HTTP::Tinyish::Curl.new();
+        my $email = uri_escape($req.parameters<email>);
+        say "invite $email";
+        my $token = %*ENV<SLACK_API_TOKEN>;
+        my $http = HTTP::Tinyish.new();
         $http.post:
             "https://soozy.slack.com/api/users.admin.invite",
             headers => { "Content-Type" => "application/x-www-form-urlencoded" },
